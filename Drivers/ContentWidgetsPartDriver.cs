@@ -7,6 +7,7 @@ using Piedone.ContentWidgets.Models;
 using Orchard.ContentManagement;
 using Piedone.ContentWidgets.Settings;
 using Orchard.Widgets.Models;
+using Piedone.ContentWidgets.ViewModels;
 
 namespace Piedone.ContentWidgets.Drivers
 {
@@ -26,8 +27,11 @@ namespace Piedone.ContentWidgets.Drivers
 
         protected override DriverResult Display(ContentWidgetsPart part, string displayType, dynamic shapeHelper)
         {
-            var typePartSettings = part.Settings.GetModel<ContentWidgetsTypePartSettings>();
-            var displayedWidgetIds = from id in typePartSettings.AttachedWidgetIds where !part.ExcludedWidgetIds.Contains(id) select id;
+            var settings = part.Settings.GetModel<ContentWidgetsTypePartSettings>();
+            var excludedWidgetIds = ContentWidgetsViewModel.DeserializeIds(part.ExcludedWidgetIdsDefinition);
+            var displayedWidgetIds = from id in ContentWidgetsViewModel.DeserializeIds(settings.AttachedWidgetIdsDefinition)
+                                     where !excludedWidgetIds.Contains(id)
+                                     select id;
 
             var results = new List<DriverResult>();
 
@@ -53,30 +57,32 @@ namespace Piedone.ContentWidgets.Drivers
         // GET
         protected override DriverResult Editor(ContentWidgetsPart part, dynamic shapeHelper)
         {
-            part.Widgets = (from widget in _contentManager.GetMany<WidgetPart>(
-                                part.Settings.GetModel<ContentWidgetsTypePartSettings>().AttachedWidgetIds,
+            var viewModel = new ContentWidgetsViewModel();
+            viewModel.Widgets = (from widget in _contentManager.GetMany<WidgetPart>(
+                                ContentWidgetsViewModel.DeserializeIds(part.Settings.GetModel<ContentWidgetsTypePartSettings>().AttachedWidgetIdsDefinition),
                                 VersionOptions.Published,
                                 new QueryHints().ExpandRecords<WidgetPartRecord>())
-                             select new WidgetAttachment
-                             {
-                                 Id = widget.Id,
-                                 Title = widget.Title,
-                                 IsAttached = !part.ExcludedWidgetIds.Contains(widget.Id)
-                             }).ToList();
+                                select new ContentWidget
+                                {
+                                    Id = widget.Id,
+                                    Title = widget.Title,
+                                    IsAttached = !ContentWidgetsViewModel.DeserializeIds(part.ExcludedWidgetIdsDefinition).Contains(widget.Id)
+                                }).ToList();
 
             return ContentShape("Parts_ContentWidgetsPart_Edit",
                 () => shapeHelper.EditorTemplate(
                     TemplateName: "Parts.ContentWidgets",
-                    Model: part,
+                    Model: viewModel,
                     Prefix: Prefix));
         }
 
         // POST
         protected override DriverResult Editor(ContentWidgetsPart part, IUpdateModel updater, dynamic shapeHelper)
         {
-            updater.TryUpdateModel(part, Prefix, null, null);
+            var viewModel = new ContentWidgetsViewModel();
+            updater.TryUpdateModel(viewModel, Prefix, null, null);
 
-            part.ExcludedWidgetIds = from widget in part.Widgets where !widget.IsAttached select widget.Id;
+            part.ExcludedWidgetIdsDefinition = viewModel.GetIdsSerialized(widget => !widget.IsAttached);
 
             return Editor(part, shapeHelper);
         }

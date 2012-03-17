@@ -2,7 +2,7 @@ Name: Content Widgets
 AntiForgery: enabled
 Author: Piedone
 Website: https://contentwidgets.codeplex.com/
-Version: 1.0
+Version: 0.8
 OrchardVersion: 1.4
 Description: Description for the module
 Features:

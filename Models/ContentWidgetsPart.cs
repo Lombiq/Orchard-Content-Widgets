@@ -14,28 +14,5 @@ namespace Piedone.ContentWidgets.Models
             get { return Record.ExcludedWidgetIdsDefinition; }
             set { Record.ExcludedWidgetIdsDefinition = value; }
         }
-
-        private IEnumerable<int> _excludedWidgetIds;
-        public IEnumerable<int> ExcludedWidgetIds
-        {
-            get
-            {
-                if (_excludedWidgetIds == null)
-                {
-                    if (String.IsNullOrEmpty(ExcludedWidgetIdsDefinition)) _excludedWidgetIds = new int[0];
-                    else _excludedWidgetIds = new JavaScriptSerializer().Deserialize<IEnumerable<int>>(ExcludedWidgetIdsDefinition);
-                }
-
-                return _excludedWidgetIds;
-            }
-
-            set
-            {
-                _excludedWidgetIds = value;
-                ExcludedWidgetIdsDefinition = new JavaScriptSerializer().Serialize(_excludedWidgetIds);
-            }
-        }
-
-        public IList<WidgetAttachment> Widgets { get; set; }
     }
 }

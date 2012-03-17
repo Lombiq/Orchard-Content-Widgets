@@ -96,6 +96,7 @@
     <Compile Include="Models\ContentWidgetsPartRecord.cs" />
     <Compile Include="Models\WidgetAttachment.cs" />
     <Compile Include="Settings\ContentWidgetsSettingsHooks.cs" />
+    <Compile Include="ViewModels\ContentWidgetsViewModel.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />

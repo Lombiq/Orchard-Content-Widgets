@@ -11,6 +11,7 @@ using Orchard.Widgets.Models;
 using Orchard.Widgets.Services;
 using System.Web.Script.Serialization;
 using Piedone.ContentWidgets.Models;
+using Piedone.ContentWidgets.ViewModels;
 
 namespace Piedone.ContentWidgets.Settings
 {
@@ -20,34 +21,16 @@ namespace Piedone.ContentWidgets.Settings
         /// JSON array of the ids of widgets that are attached to the content type's items
         /// </summary>
         public string AttachedWidgetIdsDefinition { get; set; }
-
-        private IEnumerable<int> _attachedWidgetIds;
-        public IEnumerable<int> AttachedWidgetIds
-        {
-            get
-            {
-                if (_attachedWidgetIds == null)
-                {
-                    if (String.IsNullOrEmpty(AttachedWidgetIdsDefinition)) _attachedWidgetIds = new int[0];
-                    else _attachedWidgetIds = new JavaScriptSerializer().Deserialize<IEnumerable<int>>(AttachedWidgetIdsDefinition);
-                }
-
-                return _attachedWidgetIds;
-            }
-
-            set
-            {
-                _attachedWidgetIds = value;
-                AttachedWidgetIdsDefinition = new JavaScriptSerializer().Serialize(_attachedWidgetIds);
-            }
-        }
-
-        public IList<WidgetAttachment> Widgets { get; set; }
     }
 
     public class ContentWidgetsSettingsHooks : ContentDefinitionEditorEventsBase
     {
         private readonly IWidgetsService _widgetService;
+
+        private string Prefix
+        {
+            get { return "ContentWidgetsTypePartSettings"; }
+        }
 
         public ContentWidgetsSettingsHooks(IWidgetsService widgetService)
         {
@@ -59,17 +42,18 @@ namespace Piedone.ContentWidgets.Settings
             if (definition.PartDefinition.Name != "ContentWidgetsPart")
                 yield break;
 
-            var model = definition.Settings.GetModel<ContentWidgetsTypePartSettings>();
+            var settings = definition.Settings.GetModel<ContentWidgetsTypePartSettings>();
+            var attachedWidgetIds = ContentWidgetsViewModel.DeserializeIds(settings.AttachedWidgetIdsDefinition);
+            var viewModel = new ContentWidgetsViewModel();
+            viewModel.Widgets = (from widget in _widgetService.GetWidgets()
+                                 select new ContentWidget
+                                 {
+                                     Id = widget.Id,
+                                     Title = widget.Title,
+                                     IsAttached = attachedWidgetIds.Contains(widget.Id)
+                                 }).ToList();
 
-            model.Widgets = (from widget in _widgetService.GetWidgets()
-                             select new WidgetAttachment
-                             {
-                                 Id = widget.Id,
-                                 Title = widget.Title,
-                                 IsAttached = model.AttachedWidgetIds.Contains(widget.Id)
-                             }).ToList();
-
-            yield return DefinitionTemplate(model);
+            yield return DefinitionTemplate(viewModel, "ContentWidgetsTypePartSettings", Prefix);
         }
 
         public override IEnumerable<TemplateViewModel> TypePartEditorUpdate(ContentTypePartDefinitionBuilder builder, IUpdateModel updateModel)
@@ -77,12 +61,12 @@ namespace Piedone.ContentWidgets.Settings
             if (builder.Name != "ContentWidgetsPart")
                 yield break;
 
-            var model = new ContentWidgetsTypePartSettings();
-            updateModel.TryUpdateModel(model, "ContentWidgetsTypePartSettings", null, null);
-            model.AttachedWidgetIds = (from widget in model.Widgets where widget.IsAttached select widget.Id);
-            builder.WithSetting("ContentWidgetsTypePartSettings.AttachedWidgetIdsDefinition", model.AttachedWidgetIdsDefinition);
+            var viewModel = new ContentWidgetsViewModel();
+            updateModel.TryUpdateModel(viewModel, Prefix, null, null);
 
-            yield return DefinitionTemplate(model);
+            builder.WithSetting("ContentWidgetsTypePartSettings.AttachedWidgetIdsDefinition", viewModel.GetIdsSerialized(widget => widget.IsAttached));
+
+            yield return DefinitionTemplate(viewModel, "ContentWidgetsTypePartSettings", Prefix);
         }
     }
 }
