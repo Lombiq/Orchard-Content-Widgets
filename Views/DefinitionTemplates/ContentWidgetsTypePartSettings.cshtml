@@ -1,0 +1,19 @@
+﻿@model Piedone.ContentWidgets.Settings.ContentWidgetsTypePartSettings
+
+<fieldset>
+    <span class="hint">
+        @T("Check the widgets you want to be displayed with the items of this content type.")<br />
+        @T("WARNING: You'll need to specify a placement in a Placement.info for all the widgets; use the shape names corresponding to the widget listed below.")
+    </span>
+    <ul>
+    @for (int i = 0; i < Model.Widgets.Count; i++)
+    {
+        <li>
+            @Html.HiddenFor(m => m.Widgets[i].Id)
+            @Html.CheckBoxFor(m => m.Widgets[i].IsAttached)
+            <label for="@Html.FieldIdFor(m => m.Widgets[i].IsAttached)" class="forcheckbox">@Model.Widgets[i].Title</label>
+            &nbsp;Produced shape: Parts_ContentWidgetsPart_Widget_@(Model.Widgets[i].Id)
+        </li>
+    }
+    </ul>
+</fieldset>

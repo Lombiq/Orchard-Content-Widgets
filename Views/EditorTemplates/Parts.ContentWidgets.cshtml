@@ -1,0 +1,16 @@
+﻿@model Piedone.ContentWidgets.Models.ContentWidgetsPart
+
+<fieldset>
+    <legend>@T("Content Widgets Settings")</legend>
+    <ul>
+    @for (int i = 0; i < Model.Widgets.Count; i++)
+    {
+        <li>
+            @Html.HiddenFor(m => m.Widgets[i].Id)
+            @Html.CheckBoxFor(m => m.Widgets[i].IsAttached)
+            <label for="@Html.FieldIdFor(m => m.Widgets[i].IsAttached)" class="forcheckbox">@Model.Widgets[i].Title</label>
+            &nbsp;Produced shape: Parts_ContentWidgetsPart_Widget_@(Model.Widgets[i].Id)
+        </li>
+    }
+    </ul>
+</fieldset>

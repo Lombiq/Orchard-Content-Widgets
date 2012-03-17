@@ -8,5 +8,5 @@ Description: Description for the module
 Features:
     Piedone.ContentWidgets:
         Description: Makes it possible to add arbitrary widgets to content types (with the option to disable per item)
-		Category: Widgets
+		Category: Widget
 		Dependencies: Orchard.Widgets
