@@ -59,6 +59,7 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Styles\piedone-content-widgets-admin.css" />
     <Content Include="Web.config" />
     <Content Include="Views\Web.config" />
     <Content Include="Scripts\Web.config" />
@@ -95,6 +96,7 @@
     <Compile Include="Models\ContentWidgetsPart.cs" />
     <Compile Include="Models\ContentWidgetsPartRecord.cs" />
     <Compile Include="Models\WidgetAttachment.cs" />
+    <Compile Include="ResourceManifest.cs" />
     <Compile Include="Settings\ContentWidgetsSettingsHooks.cs" />
     <Compile Include="ViewModels\ContentWidgetsViewModel.cs" />
   </ItemGroup>

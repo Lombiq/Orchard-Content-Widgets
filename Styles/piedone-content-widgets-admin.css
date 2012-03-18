@@ -1,0 +1,10 @@
+﻿#piedone-content-widgets-item-widget-list li
+{
+    display: inline-block;
+    margin-left: 2.2em;
+}
+
+#piedone-content-widgets-item-widget-list li:first-child
+{
+    margin-left: 0;
+}
