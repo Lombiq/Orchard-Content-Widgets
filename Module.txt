@@ -2,7 +2,7 @@ Name: Content Widgets
 AntiForgery: enabled
 Author: Piedone
 Website: https://contentwidgets.codeplex.com/
-Version: 0.8
+Version: 0.8.1
 OrchardVersion: 1.4
 Description: Makes it possible to add arbitrary widgets to content types (with the option to disable per item)
 Features:
