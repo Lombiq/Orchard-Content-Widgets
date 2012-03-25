@@ -8,6 +8,7 @@ using Orchard.ContentManagement;
 using Piedone.ContentWidgets.Settings;
 using Orchard.Widgets.Models;
 using Piedone.ContentWidgets.ViewModels;
+using Orchard.ContentManagement.Handlers;
 
 namespace Piedone.ContentWidgets.Drivers
 {
@@ -85,6 +86,16 @@ namespace Piedone.ContentWidgets.Drivers
             part.ExcludedWidgetIdsDefinition = viewModel.GetIdsSerialized(widget => !widget.IsAttached);
 
             return Editor(part, shapeHelper);
+        }
+
+        protected override void Exporting(ContentWidgetsPart part, ExportContentContext context)
+        {
+            context.Element(part.PartDefinition.Name).SetAttributeValue("ExcludedWidgetIdsDefinition", part.ExcludedWidgetIdsDefinition);
+        }
+
+        protected override void Importing(ContentWidgetsPart part, ImportContentContext context)
+        {
+            part.ExcludedWidgetIdsDefinition = context.Attribute(part.PartDefinition.Name, "ExcludedWidgetIdsDefinition");
         }
     }
 }
