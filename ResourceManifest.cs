@@ -11,7 +11,7 @@ namespace Piedone.ContentWidgets
         public void BuildManifests(ResourceManifestBuilder builder)
         {
             var manifest = builder.Add();
-            manifest.DefineStyle("ContentWidgetsAdmin").SetUrl("piedone-content-widgets-admin.css");
+            manifest.DefineStyle("ContentWidgets_Admin").SetUrl("piedone-content-widgets-admin.css");
         }
     }
 }
