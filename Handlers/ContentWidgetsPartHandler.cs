@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Orchard.ContentManagement.Handlers;
+﻿using Orchard.ContentManagement.Handlers;
 using Orchard.Data;
 using Piedone.ContentWidgets.Models;
 

@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using Orchard.ContentManagement.Drivers;
-using Piedone.ContentWidgets.Models;
 using Orchard.ContentManagement;
-using Piedone.ContentWidgets.Settings;
-using Orchard.Widgets.Models;
-using Piedone.ContentWidgets.ViewModels;
+using Orchard.ContentManagement.Drivers;
 using Orchard.ContentManagement.Handlers;
+using Orchard.Widgets.Models;
+using Piedone.ContentWidgets.Models;
+using Piedone.ContentWidgets.Settings;
+using Piedone.ContentWidgets.ViewModels;
 using Piedone.HelpfulLibraries.Serialization;
-using System.Diagnostics;
 
 namespace Piedone.ContentWidgets.Drivers
 {

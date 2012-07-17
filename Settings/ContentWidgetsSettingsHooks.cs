@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using Orchard.ContentManagement.MetaData;
-using Orchard.ContentManagement.ViewModels;
-using Orchard.ContentManagement.MetaData.Models;
-using Orchard.ContentManagement.MetaData.Builders;
 using Orchard.ContentManagement;
-using Orchard.Widgets.Models;
+using Orchard.ContentManagement.MetaData;
+using Orchard.ContentManagement.MetaData.Builders;
+using Orchard.ContentManagement.MetaData.Models;
+using Orchard.ContentManagement.ViewModels;
 using Orchard.Widgets.Services;
-using Piedone.ContentWidgets.Models;
 using Piedone.ContentWidgets.ViewModels;
 using Piedone.HelpfulLibraries.Serialization;
 
