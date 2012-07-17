@@ -6,11 +6,11 @@ using Piedone.ContentWidgets.Models;
 
 namespace Piedone.ContentWidgets
 {
+    // Funny fail of copy-paste :-)
     public class FacebookLikeButtonMigrations : DataMigrationImpl
     {
         public int Create()
         {
-            // Creating table FacebookLikeButtonPartRecord
             SchemaBuilder.CreateTable(typeof(ContentWidgetsPartRecord).Name,
                 table => table
                     .ContentPartRecord()
