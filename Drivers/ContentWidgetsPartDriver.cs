@@ -9,6 +9,8 @@ using Piedone.ContentWidgets.Settings;
 using Orchard.Widgets.Models;
 using Piedone.ContentWidgets.ViewModels;
 using Orchard.ContentManagement.Handlers;
+using Piedone.HelpfulLibraries.Serialization;
+using System.Diagnostics;
 
 namespace Piedone.ContentWidgets.Drivers
 {
@@ -29,26 +31,22 @@ namespace Piedone.ContentWidgets.Drivers
         protected override DriverResult Display(ContentWidgetsPart part, string displayType, dynamic shapeHelper)
         {
             var settings = part.Settings.GetModel<ContentWidgetsTypePartSettings>();
-            var excludedWidgetIds = ContentWidgetsViewModel.DeserializeIds(part.ExcludedWidgetIdsDefinition);
-            var displayedWidgetIds = from id in ContentWidgetsViewModel.DeserializeIds(settings.AttachedWidgetIdsDefinition)
+            var excludedWidgetIds = IdSerializer.DeserializeIds(part.ExcludedWidgetIdsDefinition);
+            var displayedWidgetIds = from id in IdSerializer.DeserializeIds(settings.AttachedWidgetIdsDefinition)
                                      where !excludedWidgetIds.Contains(id)
                                      select id;
 
             var results = new List<DriverResult>();
 
-            foreach (var id in displayedWidgetIds)
+            var widgets = _contentManager.GetMany<IContent>(displayedWidgetIds, VersionOptions.Published, new QueryHints().ExpandParts<WidgetPart>());
+            foreach (var widget in widgets)
             {
-                int widgetId = id;
+                // This is needed so the lambda gets a frech copy.
+                var currentWidget = widget;
 
                 results.Add(
-                    ContentShape("Parts_ContentWidgetsPart_Widget_" + id, 
-                    () =>
-                    {
-                        var widget = _contentManager.Get(widgetId);
-                        // This can only happen if a widget previously attached gets removed.
-                        if (widget == null) return shapeHelper.Empty();
-                        return _contentManager.BuildDisplay(widget);
-                    })
+                    ContentShape("Parts_ContentWidgetsPart_Widget_" + currentWidget.ContentItem.Id, 
+                        () => _contentManager.BuildDisplay(currentWidget))
                 );
             }
 
@@ -58,23 +56,27 @@ namespace Piedone.ContentWidgets.Drivers
         // GET
         protected override DriverResult Editor(ContentWidgetsPart part, dynamic shapeHelper)
         {
-            var viewModel = new ContentWidgetsViewModel();
-            viewModel.Widgets = (from widget in _contentManager.GetMany<WidgetPart>(
-                                ContentWidgetsViewModel.DeserializeIds(part.Settings.GetModel<ContentWidgetsTypePartSettings>().AttachedWidgetIdsDefinition),
-                                VersionOptions.Published,
-                                new QueryHints().ExpandRecords<WidgetPartRecord>())
-                                select new ContentWidget
-                                {
-                                    Id = widget.Id,
-                                    Title = widget.Title,
-                                    IsAttached = !ContentWidgetsViewModel.DeserializeIds(part.ExcludedWidgetIdsDefinition).Contains(widget.Id)
-                                }).ToList();
-
             return ContentShape("Parts_ContentWidgetsPart_Edit",
-                () => shapeHelper.EditorTemplate(
-                    TemplateName: "Parts.ContentWidgets",
-                    Model: viewModel,
-                    Prefix: Prefix));
+                () =>
+                {
+                    var excludedWidgetIds = IdSerializer.DeserializeIds(part.ExcludedWidgetIdsDefinition); 
+                    var viewModel = new ContentWidgetsViewModel();
+                    viewModel.Widgets = (from widget in _contentManager.GetMany<WidgetPart>(
+                                            IdSerializer.DeserializeIds(part.Settings.GetModel<ContentWidgetsTypePartSettings>().AttachedWidgetIdsDefinition),
+                                            VersionOptions.Published,
+                                            new QueryHints().ExpandRecords<WidgetPartRecord>())
+                                        select new ContentWidget
+                                        {
+                                            Id = widget.ContentItem.Id,
+                                            Title = widget.Title,
+                                            IsAttached = !excludedWidgetIds.Contains(widget.Id)
+                                        }).ToList();
+
+                    return shapeHelper.EditorTemplate(
+                                TemplateName: "Parts.ContentWidgets",
+                                Model: viewModel,
+                                Prefix: Prefix);
+                });
         }
 
         // POST
@@ -83,7 +85,9 @@ namespace Piedone.ContentWidgets.Drivers
             var viewModel = new ContentWidgetsViewModel();
             updater.TryUpdateModel(viewModel, Prefix, null, null);
 
-            part.ExcludedWidgetIdsDefinition = viewModel.GetIdsSerialized(widget => !widget.IsAttached);
+            var excludedWidgetIds = viewModel.Widgets.Where(widget => !widget.IsAttached).Select(widget => widget.Id);
+
+            part.ExcludedWidgetIdsDefinition = IdSerializer.SerializeIds(excludedWidgetIds);
 
             return Editor(part, shapeHelper);
         }

@@ -9,4 +9,4 @@ Features:
     Piedone.ContentWidgets:
         Description: Makes it possible to add arbitrary widgets to content types (with the option to disable per item)
 		Category: Widget
-		Dependencies: Orchard.Widgets
+		Dependencies: Orchard.Widgets, Piedone.HelpfulLibraries.Serialization

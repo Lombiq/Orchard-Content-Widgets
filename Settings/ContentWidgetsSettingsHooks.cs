@@ -9,9 +9,9 @@ using Orchard.ContentManagement.MetaData.Builders;
 using Orchard.ContentManagement;
 using Orchard.Widgets.Models;
 using Orchard.Widgets.Services;
-using System.Web.Script.Serialization;
 using Piedone.ContentWidgets.Models;
 using Piedone.ContentWidgets.ViewModels;
+using Piedone.HelpfulLibraries.Serialization;
 
 namespace Piedone.ContentWidgets.Settings
 {
@@ -43,7 +43,9 @@ namespace Piedone.ContentWidgets.Settings
                 yield break;
 
             var settings = definition.Settings.GetModel<ContentWidgetsTypePartSettings>();
-            var attachedWidgetIds = ContentWidgetsViewModel.DeserializeIds(settings.AttachedWidgetIdsDefinition);
+
+            var attachedWidgetIds = IdSerializer.DeserializeIds(settings.AttachedWidgetIdsDefinition);
+
             var viewModel = new ContentWidgetsViewModel();
             viewModel.Widgets = (from widget in _widgetService.GetWidgets()
                                  select new ContentWidget
@@ -64,7 +66,9 @@ namespace Piedone.ContentWidgets.Settings
             var viewModel = new ContentWidgetsViewModel();
             updateModel.TryUpdateModel(viewModel, Prefix, null, null);
 
-            builder.WithSetting("ContentWidgetsTypePartSettings.AttachedWidgetIdsDefinition", viewModel.GetIdsSerialized(widget => widget.IsAttached));
+            var attachedWidgetIds = viewModel.Widgets.Where(widget => widget.IsAttached).Select(widget => widget.Id);
+
+            builder.WithSetting("ContentWidgetsTypePartSettings.AttachedWidgetIdsDefinition", IdSerializer.SerializeIds(attachedWidgetIds));
 
             yield return DefinitionTemplate(viewModel, "ContentWidgetsTypePartSettings", Prefix);
         }
