@@ -95,7 +95,6 @@
     <Compile Include="Migrations.cs" />
     <Compile Include="Models\ContentWidgetsPart.cs" />
     <Compile Include="Models\ContentWidgetsPartRecord.cs" />
-    <Compile Include="Models\WidgetAttachment.cs" />
     <Compile Include="ResourceManifest.cs" />
     <Compile Include="Settings\ContentWidgetsSettingsHooks.cs" />
     <Compile Include="ViewModels\ContentWidgetsViewModel.cs" />
