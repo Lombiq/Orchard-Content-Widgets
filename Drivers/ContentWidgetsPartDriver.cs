@@ -96,7 +96,7 @@ namespace Piedone.ContentWidgets.Drivers
 
         protected override void Importing(ContentWidgetsPart part, ImportContentContext context)
         {
-            part.ExcludedWidgetIdsDefinition = context.Attribute(part.PartDefinition.Name, "ExcludedWidgetIdsDefinition");
+            context.ImportAttribute(part.PartDefinition.Name, "ExcludedWidgetIdsDefinition", value => part.ExcludedWidgetIdsDefinition = value);
         }
     }
 }
