@@ -88,8 +88,8 @@
     <Content Include="Placement.info">
       <SubType>Designer</SubType>
     </Content>
-    <None Include="Views\DefinitionTemplates\ContentWidgetsTypePartSettings.cshtml" />
-    <None Include="Views\EditorTemplates\Parts.ContentWidgets.cshtml" />
+    <Content Include="Views\DefinitionTemplates\ContentWidgetsTypePartSettings.cshtml" />
+    <Content Include="Views\EditorTemplates\Parts.ContentWidgets.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Drivers\ContentWidgetsPartDriver.cs" />
