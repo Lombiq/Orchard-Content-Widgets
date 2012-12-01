@@ -41,9 +41,19 @@ namespace Piedone.ContentWidgets.Drivers
                 // This is needed so the lambda gets a fresh copy.
                 var currentWidget = widget;
 
+
+
                 results.Add(
-                    ContentShape("Parts_ContentWidgetsPart_Widget_" + currentWidget.ContentItem.Id, 
-                        () => _contentManager.BuildDisplay(currentWidget))
+                    ContentShape("Parts_ContentWidgetsPart_Widget_" + currentWidget.ContentItem.Id,
+                        () =>
+                        {
+                            var shape = _contentManager.BuildDisplay(currentWidget);
+                            foreach (var partShape in shape.Content.Items)
+                            {
+                                partShape.ParentContentItem = part.ContentItem;
+                            }
+                            return shape;
+                        })
                 );
             }
 
