@@ -38,7 +38,7 @@ namespace Piedone.ContentWidgets.Drivers
             var widgets = _contentManager.GetMany<IContent>(displayedWidgetIds, VersionOptions.Published, new QueryHints().ExpandParts<WidgetPart>());
             foreach (var widget in widgets)
             {
-                // This is needed so the lambda gets a frech copy.
+                // This is needed so the lambda gets a fresh copy.
                 var currentWidget = widget;
 
                 results.Add(
