@@ -20,10 +20,12 @@ namespace Piedone.ContentWidgets.Drivers
             get { return "ContentWidgets"; }
         }
 
+
         public ContentWidgetsPartDriver(IContentManager contentManager)
         {
             _contentManager = contentManager;
         }
+
 
         protected override DriverResult Display(ContentWidgetsPart part, string displayType, dynamic shapeHelper)
         {
@@ -40,8 +42,6 @@ namespace Piedone.ContentWidgets.Drivers
             {
                 // This is needed so the lambda gets a fresh copy.
                 var currentWidget = widget;
-
-
 
                 results.Add(
                     ContentShape("Parts_ContentWidgetsPart_Widget_" + currentWidget.ContentItem.Id,
