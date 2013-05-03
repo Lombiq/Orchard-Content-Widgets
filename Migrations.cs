@@ -1,10 +1,10 @@
-﻿using Orchard.ContentManagement.MetaData;
+﻿using System.Linq;
+using Orchard.ContentManagement.MetaData;
 using Orchard.Core.Contents.Extensions;
-using Orchard.Data.Migration;
-using Piedone.ContentWidgets.Models;
-using Orchard.Data.Migration.Records;
 using Orchard.Data;
-using System.Linq;
+using Orchard.Data.Migration;
+using Orchard.Data.Migration.Records;
+using Piedone.ContentWidgets.Models;
 
 namespace Piedone.ContentWidgets
 {
