@@ -6,8 +6,8 @@ namespace Piedone.ContentWidgets.Models
     {
         public string ExcludedWidgetIdsDefinition
         {
-            get { return Record.ExcludedWidgetIdsDefinition; }
-            set { Record.ExcludedWidgetIdsDefinition = value; }
+            get { return Retrieve(x => x.ExcludedWidgetIdsDefinition); }
+            set { Store(x => x.ExcludedWidgetIdsDefinition, value); }
         }
     }
 }
