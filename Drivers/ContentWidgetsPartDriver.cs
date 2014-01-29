@@ -98,15 +98,5 @@ namespace Piedone.ContentWidgets.Drivers
 
             return Editor(part, shapeHelper);
         }
-
-        protected override void Exporting(ContentWidgetsPart part, ExportContentContext context)
-        {
-            context.Element(part.PartDefinition.Name).SetAttributeValue("ExcludedWidgetIdsDefinition", part.ExcludedWidgetIdsDefinition);
-        }
-
-        protected override void Importing(ContentWidgetsPart part, ImportContentContext context)
-        {
-            context.ImportAttribute(part.PartDefinition.Name, "ExcludedWidgetIdsDefinition", value => part.ExcludedWidgetIdsDefinition = value);
-        }
     }
 }
