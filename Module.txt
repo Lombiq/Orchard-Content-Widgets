@@ -3,7 +3,7 @@ AntiForgery: enabled
 Author: Piedone
 Website: https://github.com/Lombiq/Orchard-Content-Widgets
 Version: 0.9.1
-OrchardVersion: 1.9.2
+OrchardVersion: 1.9.3
 Description: Makes it possible to add arbitrary widgets to content types (with the option to disable per item)
 Features:
     Piedone.ContentWidgets:
