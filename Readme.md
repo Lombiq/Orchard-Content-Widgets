@@ -1,8 +1,8 @@
-# Content Widgets Orchard module Readme
+# Content Widgets Orchard module
 
 
 
-## Project Description
+## About
 
 This Orchard module makes it possible to add arbitrary widgets to content types (with the option to disable per item).
 
@@ -26,12 +26,9 @@ You can install the module from the [Gallery](http://gallery.orchardproject.net/
 
 [Version History](Docs/VersionHistory.md)
 
-The module's source is available in two public source repositories, automatically mirrored in both directions with [Git-hg Mirror](https://githgmirror.com):
 
-- [https://bitbucket.org/Lombiq/orchard-content-widgets](https://bitbucket.org/Lombiq/orchard-content-widgets) (Mercurial repository)
-- [https://github.com/Lombiq/Orchard-Content-Widgets](https://github.com/Lombiq/Orchard-Content-Widgets) (Git repository)
+## Contributing and support
 
-Bug reports, feature requests and comments are warmly welcome, **please do so via GitHub**.
-Feel free to send pull requests too, no matter which source repository you choose for this purpose.
+Bug reports, feature requests, comments, questions, code contributions, and love letters are warmly welcome, please do so via GitHub issues and pull requests. Please adhere to our [open-source guidelines](https://lombiq.com/open-source-guidelines) while doing so.
 
-This project is developed by [Lombiq Technologies Ltd](http://lombiq.com/). Commercial-grade support is available through Lombiq.
+This project is developed by [Lombiq Technologies](https://lombiq.com/). Commercial-grade support is available through Lombiq.
